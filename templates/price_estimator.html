@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmUp | Market Price Estimator</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #237a46;
+            --green-dark: #155d35;
+            --green-light: #eaf5ed;
+            --text: #1d2b22;
+            --muted: #65736a;
+            --background: #f8faf7;
+            --white: #ffffff;
+            --border: #e4ebe5;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            width: min(1120px, 90%);
+            margin: auto;
+            min-height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            font-family: "Manrope", sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--green);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        /* Main Container */
+        .estimator-container {
+            width: min(1000px, 90%);
+            margin: 40px auto;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--green-light);
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        h1, h2, h3 {
+            font-family: "Manrope", sans-serif;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--muted);
+            margin-bottom: 30px;
+        }
+
+        /* Weather Widget Banner */
+        .weather-banner {
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
+            color: white;
+            padding: 20px 24px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .weather-info h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .weather-info p {
+            font-size: 13px;
+            opacity: 0.92;
+        }
+
+        .weather-temp {
+            font-family: "Manrope", sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input, select {
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f9fafb;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--green);
+            background-color: var(--white);
+            box-shadow: 0 0 0 4px rgba(35, 122, 70, 0.1);
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn-calculate:hover {
+            background-color: var(--green-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 35px;
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .results-heading {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .source-badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .source-live {
+            background-color: var(--green-light);
+            color: var(--green-dark);
+        }
+
+        .source-cache {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+
+        .mandi-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mandi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 61, 37, 0.06);
+            border-color: var(--green);
+        }
+
+        .mandi-card.best-winner {
+            border: 2px solid var(--green);
+            background-color: #f3fbf5;
+        }
+
+        .mandi-details h4 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .mandi-details p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .mandi-price-box {
+            text-align: right;
+        }
+
+        .price {
+            font-family: "Manrope", sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .distance {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .economics-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: flex-end;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .economics-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 140px;
+        }
+
+        .economics-field input {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .btn-best-market {
+            padding: 11px 16px;
+            background-color: var(--green-dark);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-best-market:hover {
+            background-color: var(--green);
+        }
+
+        .best-market-banner {
+            background: var(--green-light);
+            border: 1px solid var(--green);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .best-tag {
+            display: inline-block;
+            background: var(--green);
+            color: var(--white);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 999px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .mandi-action-panel {
+            width: 100%;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border);
+            display: none;
+        }
+
+        .btn-earning {
+            padding: 9px 14px;
+            background-color: var(--green);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn-earning:hover {
+            background-color: var(--green-dark);
+        }
+
+        .earning-breakdown {
+            margin-top: 10px;
+            background: var(--background);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 13.5px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .weather-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .mandi-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .mandi-price-box {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="nav-content">
+            <a href="{{ url_for('home') }}" class="logo">Farm<span>Up.</span></a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('logout') }}" style="color: #dc2626;">Logout</a>
+                 <a href="{{ url_for('other_services') }}">Other Services</a>
+                <a href="{{ url_for('about') }}" class="active">About Us</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="estimator-container">
+        <div class="card">
+            <span class="badge">• Smart Mandi Finder</span>
+            <h1>Market Price Estimator</h1>
+            <p class="subtitle">Enter your PIN code to auto-detect your location, live weather, and nearby mandi rates.</p>
+
+            <!-- Auto-Detected Weather Widget -->
+            <div class="weather-banner" id="weatherBanner">
+                <div class="weather-info">
+                    <h3 id="locationText">Location: Enter PIN code below</h3>
+                    <p id="weatherDesc">Live atmospheric conditions will load automatically</p>
+                </div>
+                <div class="weather-temp" id="tempText">--°C</div>
+            </div>
+
+            <!-- Estimator Form -->
+            <form id="estimatorForm" onsubmit="handleEstimate(event)">
+                <div class="form-grid">
+
+                    <!-- Section 1: Crop Selector with search -->
+                    <div class="form-group">
+                        <label for="cropInput">Select / Search Crop</label>
+                        <input type="text" id="cropInput" placeholder="e.g. Wheat, Paddy, Potato, Carrot" list="cropList" required>
+                        <datalist id="cropList">
+                            <!-- Cereals & Food Grains -->
+                            <option value="Wheat / Gehu (गेहूं)">
+                            <option value="Paddy / Dhaan / Rice (धान / चावल)">
+                            <option value="Maize / Makka (मक्का)">
+                            <option value="Bajra / Pearl Millet (बाजरा)">
+                            <option value="Jowar / Sorghum (ज्वार)">
+                            <option value="Ragi / Finger Millet (रागी)">
+                            <option value="Barley / Jau (जौ)">
+
+                            <!-- Pulses (Dal) -->
+                            <option value="Gram / Chana (चना)">
+                            <option value="Tur / Arhar / Pigeon Pea (अरहर / तुअर)">
+                            <option value="Moong / Green Gram (मूंग)">
+                            <option value="Urad / Black Gram (उड़द)">
+                            <option value="Masoor / Lentil (मसूर)">
+                            <option value="Matar / Field Pea (मटर)">
+
+                            <!-- Oilseeds -->
+                            <option value="Mustard / Sarson / Rapeseed (सरसों)">
+                            <option value="Soybean (सोयाबीन)">
+                            <option value="Groundnut / Mungfali / Peanut (मूंगफली)">
+                            <option value="Sesame / Til (तिल)">
+                            <option value="Sunflower / Surajmukhi (सूरजमुखी)">
+                            <option value="Castor Seed / Arandi (अरंडी)">
+                            <option value="Linseed / Alsi (अलसी)">
+
+                            <!-- Cash & Commercial Crops -->
+                            <option value="Sugarcane / Ganna (गन्ना)">
+                            <option value="Cotton / Kapas (कपास)">
+                            <option value="Jute (जूट)">
+
+                            <!-- Vegetables & Tubers -->
+                            <option value="Potato / Aloo (आलू)">
+                            <option value="Onion / Pyaaz (प्याज)">
+                            <option value="Tomato / Tamatar (टमाटर)">
+                            <option value="Cauliflower / Gobhi (फूल गोभी)">
+                            <option value="Cabbage / Patta Gobhi (पत्ता गोभी)">
+                            <option value="Brinjal / Baingan / Eggplant (बैंगन)">
+                            <option value="Carrot / Gajar (गाजर)">
+                            <option value="Ladyfinger / Bhindi / Okra (भिंडी)">
+                            <option value="Green Chilli / Hari Mirch (हरी मिर्च)">
+                            <option value="Garlic / Lahsun (लहसुन)">
+                            <option value="Ginger / Adrak (अदरक)">
+                            <option value="Green Peas / Hare Matar (हरे मटर)">
+
+                            <!-- Spices -->
+                            <option value="Cumin / Jeera (जीरा)">
+                            <option value="Coriander / Dhania (धनिया)">
+                            <option value="Turmeric / Haldi (हल्दी)">
+                            <option value="Black Pepper / Kali Mirch (काली मिर्च)">
+                            <option value="Fennel / Saunf (सौंप)">
+                            <option value="Fenugreek / Methi Seeds (मेथी दाना)">
+
+                            <!-- Fruits & Orchard Produce -->
+                            <option value="Mango / Aam (आम)">
+                            <option value="Banana / Kela (केला)">
+                            <option value="Apple / Seb (सेब)">
+                            <option value="Papaya / Papita (पपीता)">
+                            <option value="Pomegranate / Anar (अनार)">
+                            <option value="Guava / Amrood (अमरूद)">
+                            <option value="Orange / Santra (संतरा)">
+                            <option value="Kinnow / Mandarin (किन्नू)">
+                            <option value="Lemon / Nimbu (नींबू)">
+                            <option value="Grapes / Angoor (अंगूर)">
+                            <option value="Watermelon / Tarbooj (तरबूज)">
+                            <option value="Muskmelon / Kharbuja (खरबूजा)">
+                            <option value="Pineapple / Ananas (अनानास)">
+                            <option value="Sapota / Chiku (चीकू)">
+                            <option value="Custard Apple / Sitaphal (शरीफा / सीताफल)">
+                            <option value="Litchi / Leechi (लीची)">
+                            <option value="Jackfruit / Kathal (कठहल)">
+                        </datalist>
+                    </div>
+
+                    <!-- Section 2: PIN Code Lookup Input -->
+                    <div class="form-group">
+                        <label for="pincodeInput">Postal PIN Code</label>
+                        <input type="text" id="pincodeInput" placeholder="e.g. 226001" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
+                        <span class="helper-text" id="pincodeStatus">Enter 6-digit PIN to auto-detect District & Village</span>
+                    </div>
+
+                    <!-- Section 3: Auto-Filled District -->
+                    <div class="form-group">
+                        <label for="districtInput">District</label>
+                        <input type="text" id="districtInput" placeholder="Auto-filled from PIN code" readonly required style="background-color: #f3f4f6;">
+                    </div>
+
+                    <!-- Section 4: Village / Town Dropdown from PIN API -->
+                    <div class="form-group">
+                        <label for="villageSelect">Village / Post Office</label>
+                        <select id="villageSelect" required>
+                            <option value="" disabled selected>Enter PIN code first</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-calculate">Find Best Mandi Prices &rarr;</button>
+            </form>
+
+            <!-- Results Display Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <div class="results-heading">Nearby Mandi Rates for <span id="selectedCropName" style="color: var(--green);">Your Crop</span></div>
+                    <span id="sourceBadge" class="source-badge source-live" style="display: none;"></span>
+                </div>
+
+                <div class="economics-bar">
+                    <div class="economics-field">
+                        <label for="quantityQuintals">Quantity (Quintals)</label>
+                        <input type="number" id="quantityQuintals" value="10" min="0.1" step="0.5">
+                    </div>
+                    <div class="economics-field">
+                        <label for="transportRate">Rate per km (₹/km)</label>
+                        <input type="number" id="transportRate" value="15" min="1" step="1">
+                    </div>
+                    <button type="button" class="btn-best-market" onclick="findBestMarket()">
+                        🏆 Find Best Market
+                    </button>
+                </div>
+
+                <p class="helper-text" id="gpsStatusText" style="margin-bottom: 12px;">
+                    Click any market card to automatically fetch your GPS location and distance.
+                </p>
+
+                <div class="best-market-banner" id="bestMarketBanner"></div>
+
+                <div id="mandiResultsList">
+                    <!-- Dynamically populated Mandi cards -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+   <script>
+        let detectedState = "";
+        let loadedMandis = [];
+        let cachedGpsCoords = null;
+
+        function escapeHtml(str) {
+            return String(str ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        async function fetchLiveWeather(district, state) {
+            const locText = document.getElementById('locationText');
+            const descText = document.getElementById('weatherDesc');
+            const tempText = document.getElementById('tempText');
+
+            locText.textContent = `Location: ${district}, ${state}`;
+            descText.textContent = "Fetching live weather...";
+
+            try {
+                const params = new URLSearchParams({ district, state });
+                const res = await fetch(`/api/weather?${params.toString()}`);
+                const data = await res.json();
+
+                if (!res.ok || data.temperature === null || data.temperature === undefined) {
+                    descText.textContent = "Live weather unavailable right now";
+                    tempText.textContent = "--°C";
+                    return;
+                }
+
+                tempText.textContent = `${data.temperature}°C`;
+                const humidityPart = data.humidity !== null && data.humidity !== undefined
+                    ? ` • Humidity: ${data.humidity}%`
+                    : "";
+                descText.textContent = `${data.condition}${humidityPart}`;
+            } catch (err) {
+                descText.textContent = "Could not load live weather";
+                tempText.textContent = "--°C";
+            }
+        }
+
+        function resetLocationFields(message, isError = false) {
+            const statusEl = document.getElementById('pincodeStatus');
+            const districtInput = document.getElementById('districtInput');
+            const villageSelect = document.getElementById('villageSelect');
+
+            detectedState = "";
+            districtInput.value = "";
+            villageSelect.innerHTML = '<option value="" disabled selected>Enter PIN code first</option>';
+            statusEl.textContent = message;
+            statusEl.style.color = isError ? "#dc2626" : "var(--muted)";
+        }
+
+        async function lookupPincode(rawValue) {
+            const cleaned = rawValue.replace(/\D/g, '');
+            const pincodeInput = document.getElementById('pincodeInput');
+            if (pincodeInput.value !== cleaned) {
+                pincodeInput.value = cleaned;
+            }
+
+            const statusEl = document.getElementById('pincodeStatus');
+            const districtInput = document.getElementById('districtInput');
+            const villageSelect = document.getElementById('villageSelect');
+
+            if (cleaned.length < 6) {
+                resetLocationFields("Enter 6-digit PIN to auto-detect District & Village", false);
+                return;
+            }
+
+            statusEl.textContent = "Fetching location details...";
+            statusEl.style.color = "var(--green)";
+
+            try {
+                let res = await fetch(`/api/pincode/${cleaned}`);
+                let data = await res.json();
+
+                // Fallback to direct postal API if backend route isn't reachable
+                if (!res.ok && !data.status) {
+                    const directResp = await fetch(`https://api.postalpincode.in/pincode/${cleaned}`);
+                    const directData = await directResp.json();
+                    if (Array.isArray(directData) && directData[0] && String(directData[0].Status).toLowerCase() === "success") {
+                        const offices = directData[0].PostOffice || [];
+                        data = {
+                            status: "success",
+                            district: offices[0]?.District || "",
+                            state: offices[0]?.State || "",
+                            post_offices: offices.map(po => ({
+                                name: po.Name,
+                                branch_type: po.BranchType
+                            }))
+                        };
+                    }
+                }
+
+                if (data.status === "success" && data.district) {
+                    detectedState = data.state || "";
+                    districtInput.value = data.district;
+
+                    villageSelect.innerHTML = '<option value="" disabled selected>Select Village / Post Office</option>';
+                    (data.post_offices || []).forEach(po => {
+                        const opt = document.createElement('option');
+                        opt.value = po.name;
+                        opt.textContent = po.branch_type ? `${po.name} (${po.branch_type})` : po.name;
+                        villageSelect.appendChild(opt);
+                    });
+
+                    statusEl.textContent = "✔ Location detected successfully!";
+                    statusEl.style.color = "var(--green)";
+                    fetchLiveWeather(data.district, detectedState);
+                } else {
+                    resetLocationFields(data.message || "❌ Invalid PIN code. Please check.", true);
+                }
+            } catch (error) {
+                resetLocationFields("❌ Could not look up PIN code. Check connection.", true);
+            }
+        }
+
+        document.getElementById('pincodeInput').addEventListener('input', (e) => {
+            lookupPincode(e.target.value);
+        });
+
+        function clearBestMarketHighlight() {
+            const banner = document.getElementById('bestMarketBanner');
+            if (banner) {
+                banner.style.display = 'none';
+                banner.innerHTML = '';
+            }
+            document.querySelectorAll('.mandi-card').forEach(el => {
+                el.classList.remove('best-winner');
+                const oldTag = el.querySelector('.best-tag');
+                if (oldTag) oldTag.remove();
+            });
+        }
+
+        async function handleEstimate(event) {
+            event.preventDefault();
+            const crop = document.getElementById('cropInput').value;
+            const district = document.getElementById('districtInput').value;
+            const village = document.getElementById('villageSelect').value;
+            const listContainer = document.getElementById('mandiResultsList');
+            const resultsSection = document.getElementById('resultsSection');
+            const sourceBadge = document.getElementById('sourceBadge');
+
+            if (!district) {
+                resetLocationFields("❌ Please enter a valid 6-digit PIN code first.", true);
+                return;
+            }
+
+            loadedMandis = [];
+            clearBestMarketHighlight();
+            document.getElementById('selectedCropName').textContent = crop;
+            sourceBadge.style.display = 'none';
+            listContainer.innerHTML = `<p style="color: var(--muted);">Fetching mandi prices for ${escapeHtml(district)}...</p>`;
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            const params = new URLSearchParams({
+                crop: crop,
+                district: district,
+                state: detectedState
+            });
+
+            try {
+                const res = await fetch(`/api/mandi-prices?${params.toString()}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    listContainer.innerHTML = `<p style="color: #dc2626;">${escapeHtml(data.error || "Could not load mandi prices.")}</p>`;
+                    return;
+                }
+
+                sourceBadge.style.display = 'inline-block';
+                if (data.source === "live_api") {
+                    sourceBadge.className = 'source-badge source-live';
+                    sourceBadge.textContent = '🟢 Live Government Mandi Rates';
+                } else {
+                    sourceBadge.className = 'source-badge source-cache';
+                    sourceBadge.textContent = '🟡 Saved Database Backup';
+                }
+
+                if (!data.mandis || data.mandis.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="mandi-card">
+                            <div class="mandi-details">
+                                <h4>No mandi records found for ${escapeHtml(data.commodity || crop)} in ${escapeHtml(district)}</h4>
+                                <p>Try another crop or PIN code—not every mandi reports every crop daily.</p>
+                            </div>
+                        </div>`;
+                    return;
+                }
+
+                loadedMandis = data.mandis;
+                listContainer.innerHTML = '';
+                data.mandis.forEach((m, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'mandi-card';
+                    card.onclick = () => onMarketCardClick(index);
+                    card.innerHTML = `
+                        <div class="mandi-details">
+                            <h4>${escapeHtml(m.market)} <span style="font-size: 12px; font-weight: 500; color: var(--muted);">(${escapeHtml(m.variety || 'Standard')})</span></h4>
+                            <p>Min: ₹${escapeHtml(m.min_price)} • Max: ₹${escapeHtml(m.max_price)} • Date: ${escapeHtml(m.arrival_date || 'Latest')} • Near ${escapeHtml(village)}</p>
+                        </div>
+                        <div class="mandi-price-box">
+                            <div class="price">₹${escapeHtml(m.modal_price)} / Quintal</div>
+                            <div class="distance">📍 ${escapeHtml(m.district)}, ${escapeHtml(m.state)}</div>
+                        </div>
+                        <div class="mandi-action-panel" id="panel-${index}" onclick="event.stopPropagation()">
+                            <div id="distanceInfo-${index}">Fetching distance...</div>
+                            <button type="button" class="btn-earning" id="earningBtn-${index}" onclick="calculateAndShowEarning(${index})" style="display:none;">
+                                Calculate Transport Cost &amp; Net Earning
+                            </button>
+                            <div class="earning-breakdown" id="earningBox-${index}" style="display:none;"></div>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            } catch (err) {
+                listContainer.innerHTML = `<p style="color: #dc2626;">Network error while fetching mandi prices.</p>`;
+            }
+        }
+
+        function parseNumericPrice(value) {
+            const cleaned = String(value ?? "").replace(/[^0-9.]/g, "");
+            const num = parseFloat(cleaned);
+            return Number.isNaN(num) ? null : num;
+        }
+
+        function getUserLocationAuto() {
+            return new Promise((resolve, reject) => {
+                if (cachedGpsCoords) {
+                    resolve(cachedGpsCoords);
+                    return;
+                }
+                if (!("geolocation" in navigator)) {
+                    reject(new Error("Your browser does not support location access."));
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        cachedGpsCoords = {
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude,
+                            accuracy: Math.round(pos.coords.accuracy || 0)
+                        };
+                        resolve(cachedGpsCoords);
+                    },
+                    (err) => {
+                        if (err.code === err.PERMISSION_DENIED) {
+                            reject(new Error("Location permission denied. Please allow location access in your browser."));
+                        } else {
+                            reject(new Error(err.message || "Could not fetch your current location."));
+                        }
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                );
+            });
+        }
+
+        async function fetchDistanceForMandi(mandi) {
+            if (typeof mandi._distanceKm === "number") {
+                return mandi._distanceKm;
+            }
+            const coords = await getUserLocationAuto();
+            const params = new URLSearchParams({
+                user_lat: coords.lat,
+                user_lon: coords.lon,
+                market: mandi.market || "",
+                district: mandi.district || "",
+                state: mandi.state || detectedState || ""
+            });
+            const res = await fetch(`/api/market-distance?${params.toString()}`);
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Distance calculation failed.");
+            }
+            mandi._distanceKm = Number(data.distance_km);
+            mandi._straightKm = Number(data.straight_line_km);
+            return mandi._distanceKm;
+        }
+
+        function computeNetEarning(mandi, distanceKm) {
+            const modalPrice = parseNumericPrice(mandi.modal_price);
+            const qty = Math.max(0, parseFloat(document.getElementById('quantityQuintals').value) || 0);
+            const rate = Math.max(0, parseFloat(document.getElementById('transportRate').value) || 0);
+            if (modalPrice === null) return null;
+
+            const grossRevenue = modalPrice * qty;
+            const transportCost = distanceKm * rate;
+            const netEarning = grossRevenue - transportCost;
+            return { modalPrice, qty, rate, grossRevenue, transportCost, netEarning };
+        }
+
+        async function onMarketCardClick(index) {
+            const mandi = loadedMandis[index];
+            const panel = document.getElementById(`panel-${index}`);
+            const distInfo = document.getElementById(`distanceInfo-${index}`);
+            const earningBtn = document.getElementById(`earningBtn-${index}`);
+            const gpsStatus = document.getElementById('gpsStatusText');
+
+            if (!mandi || !panel) return;
+            panel.style.display = 'block';
+            distInfo.textContent = "Fetching your GPS location and calculating distance...";
+            gpsStatus.textContent = "Fetching your live GPS location...";
+            gpsStatus.style.color = "var(--green)";
+
+            try {
+                const distKm = await fetchDistanceForMandi(mandi);
+                gpsStatus.textContent = `📍 Live GPS active (±${cachedGpsCoords.accuracy}m)`;
+                distInfo.innerHTML = `<strong>Estimated Distance:</strong> ${distKm} km <span style="color:var(--muted);">(straight-line: ${mandi._straightKm} km)</span>`;
+                earningBtn.style.display = 'inline-block';
+            } catch (err) {
+                gpsStatus.textContent = `❌ ${escapeHtml(err.message)}`;
+                gpsStatus.style.color = "#dc2626";
+                distInfo.innerHTML = `<span style="color:#dc2626;">${escapeHtml(err.message)}</span>`;
+            }
+        }
+
+        function calculateAndShowEarning(index) {
+            const mandi = loadedMandis[index];
+            const box = document.getElementById(`earningBox-${index}`);
+            if (!mandi || typeof mandi._distanceKm !== "number") return;
+
+            const calc = computeNetEarning(mandi, mandi._distanceKm);
+            box.style.display = 'block';
+
+            if (!calc) {
+                box.innerHTML = `<span style="color:#dc2626;">Modal price is not numeric for this market.</span>`;
+                return;
+            }
+
+            box.innerHTML = `
+                <div>Gross Revenue (${calc.qty} qtl × ₹${calc.modalPrice}): <strong>₹${calc.grossRevenue.toFixed(2)}</strong></div>
+                <div>Transport Cost (${mandi._distanceKm} km × ₹${calc.rate}/km): <strong>₹${calc.transportCost.toFixed(2)}</strong></div>
+                <div style="margin-top:4px; color:var(--green-dark);"><strong>Net Earning: ₹${calc.netEarning.toFixed(2)}</strong></div>
+            `;
+        }
+
+        async function findBestMarket() {
+            const banner = document.getElementById('bestMarketBanner');
+            const gpsStatus = document.getElementById('gpsStatusText');
+
+            if (!loadedMandis.length) {
+                banner.style.display = 'block';
+                banner.innerHTML = `Please search for a crop first so markets are listed.`;
+                return;
+            }
+
+            banner.style.display = 'block';
+            banner.innerHTML = `Fetching your GPS location and comparing net earnings across ${loadedMandis.length} markets...`;
+            gpsStatus.textContent = "Fetching GPS location for market comparison...";
+            gpsStatus.style.color = "var(--green)";
+
+            try {
+                await getUserLocationAuto();
+                gpsStatus.textContent = `📍 Live GPS active (±${cachedGpsCoords.accuracy}m)`;
+
+                const scored = [];
+                for (let i = 0; i < loadedMandis.length; i++) {
+                    const m = loadedMandis[i];
+                    if (parseNumericPrice(m.modal_price) === null) continue;
+                    const distKm = await fetchDistanceForMandi(m);
+                    const calc = computeNetEarning(m, distKm);
+                    if (calc) {
+                        scored.push({ index: i, mandi: m, distKm, ...calc });
+                    }
+                }
+
+                if (!scored.length) {
+                    banner.innerHTML = `No listed markets have a valid numeric modal price to compare.`;
+                    return;
+                }
+
+                scored.sort((a, b) => b.netEarning - a.netEarning);
+                const best = scored[0];
+
+                document.querySelectorAll('.mandi-card').forEach((el, idx) => {
+                    el.classList.toggle('best-winner', idx === best.index);
+                    const titleEl = el.querySelector('.mandi-details h4');
+                    if (titleEl) {
+                        const oldTag = titleEl.querySelector('.best-tag');
+                        if (oldTag) oldTag.remove();
+                        if (idx === best.index) {
+                            const tag = document.createElement('span');
+                            tag.className = 'best-tag';
+                            tag.textContent = 'BEST NET EARNING';
+                            titleEl.appendChild(tag);
+                        }
+                    }
+                });
+
+                banner.innerHTML = `
+                    <div><strong>🏆 Best Market: ${escapeHtml(best.mandi.market)}</strong> (${escapeHtml(best.mandi.district)}, ${escapeHtml(best.mandi.state)})</div>
+                    <div style="margin-top:4px;">
+                        <strong>Net Earning: ₹${best.netEarning.toFixed(2)}</strong>
+                        (Gross: ₹${best.grossRevenue.toFixed(2)} − Transport: ₹${best.transportCost.toFixed(2)} over ${best.distKm} km)
+                    </div>
+                `;
+            } catch (err) {
+                gpsStatus.textContent = `❌ ${escapeHtml(err.message)}`;
+                gpsStatus.style.color = "#dc2626";
+                banner.innerHTML = `<span style="color:#dc2626;">${escapeHtml(err.message)}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

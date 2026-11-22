@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmUp | About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #237a46;
+            --green-dark: #155d35;
+            --green-light: #eaf5ed;
+            --text: #1d2b22;
+            --muted: #65736a;
+            --background: #f8faf7;
+            --white: #ffffff;
+            --border: #e4ebe5;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            width: min(1120px, 90%);
+            margin: auto;
+            min-height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            font-family: "Manrope", sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--green);
+            text-decoration: none;
+            letter-spacing: -1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span span {
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--green);
+        }
+
+        .page-container {
+            width: min(960px, 90%);
+            margin: 36px auto;
+            flex: 1;
+        }
+
+        .page-intro {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px 34px;
+            margin-bottom: 34px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--green-light);
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        h1, h2, h3 {
+            font-family: "Manrope", sans-serif;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.7px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* Sketch-inspired vertical flow with alternating left/right blocks */
+        .sketch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .person-block {
+            width: min(640px, 100%);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px 32px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+        }
+
+        .person-block.align-left {
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .person-block.align-right {
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .circle-avatar {
+            width: 124px;
+            height: 124px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--green);
+            background: var(--green-light);
+            margin-bottom: 16px;
+        }
+
+        .person-block.align-left .circle-avatar {
+            margin-right: auto;
+        }
+
+        .person-block.align-right .circle-avatar {
+            margin-left: auto;
+        }
+
+        .circle-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .person-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .person-role {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-top: 2px;
+            margin-bottom: 14px;
+        }
+
+        .block-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .intro-copy {
+            font-size: 14.5px;
+            color: var(--text);
+            line-height: 1.65;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .person-block.align-right .skills-row {
+            justify-content: flex-end;
+        }
+
+        .skill-pill {
+            background: var(--green-light);
+            color: var(--green-dark);
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+
+        .site-footer {
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            padding: 28px 0;
+            margin-top: 44px;
+        }
+
+        .footer-content {
+            width: min(1120px, 90%);
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 13.5px;
+            font-weight: 600;
+        }
+
+        .footer-links a:hover {
+            color: var(--green);
+        }
+
+        .footer-note {
+            width: min(1120px, 90%);
+            margin: 14px auto 0;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border);
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 720px) {
+            .person-block,
+            .person-block.align-left,
+            .person-block.align-right {
+                width: 100%;
+                align-self: stretch;
+                text-align: left;
+                padding: 22px;
+            }
+            .person-block.align-right .circle-avatar {
+                margin-left: 0;
+                margin-right: auto;
+            }
+            .person-block.align-right .skills-row {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-content">
+            <a href="{{ url_for('home') }}" class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="32" height="32" rx="9" fill="#eaf5ed"/>
+                    <path d="M16 24V14" stroke="#155d35" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M16 17C11.5 17 8.5 14 8.5 9.5C13 9.5 16 12.5 16 17Z" fill="#237a46"/>
+                    <path d="M16 14.5C19.8 14.5 23.5 12 23.5 8C19.5 8 16 10.8 16 14.5Z" fill="#237a46"/>
+                </svg>
+                <span>Farm<span>Up.</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('priceEstimator') }}">Price Estimator</a>
+                <a href="{{ url_for('other_services') }}">Other Services</a>
+                <a href="{{ url_for('about') }}" class="active">About Us</a>
+                <a href="{{ url_for('logout') }}" style="color: #dc2626;">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <section class="page-intro">
+            <span class="badge">&bull; Technical Team &bull; B.Tech</span>
+            <h1>About Us</h1>
+            <p class="subtitle">
+                We're a B.Tech student team building FarmUp to help farmers compare net mandi returns, check MSP benchmarks, and reach official government scheme portals quickly. I led the backend and full-stack integration, Kashish managed the frontend experience and UI flow, and Gauri handled scheme/MSP resources and portal verification.
+            </p>
+        </section>
+
+        <div class="sketch-flow">
+            <!-- 1st Person (Left, matching sketch) -->
+            <section class="person-block align-left">
+                <div class="circle-avatar">
+                    <img
+                        src="{{ url_for('static', filename='images/Gulnaj.jpeg') }}"
+                        alt="Gulnaj"
+                        onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22124%22 height=%22124%22><rect width=%22124%22 height=%22124%22 fill=%22%23eaf5ed%22/><text x=%2250%25%22 y=%2254%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2236%22 font-weight=%22bold%22 fill=%22%23155d35%22>G</text></svg>';"
+                    >
+                </div>
+                <h2 class="person-name">Gulnaj</h2>
+                <div class="person-role">Backend Manager &amp; Full-Stack Lead &bull; B.Tech</div>
+
+                <div class="block-label">Intro &amp; Project Contribution</div>
+                <p class="intro-copy">
+                    Built the core backend and full-stack architecture of FarmUp—setting up Flask routes, the SQLite database and MSP lookup engine, external scheme portal integrations, and end-to-end template wiring.
+                </p>
+
+                <div class="block-label">Skills</div>
+                <div class="skills-row">
+                    <span class="skill-pill">Python</span>
+                    <span class="skill-pill">Flask</span>
+                    <span class="skill-pill">SQLite</span>
+                    <span class="skill-pill">REST APIs</span>
+                    <span class="skill-pill">HTML / CSS / JS</span>
+                </div>
+            </section>
+
+            <!-- 2nd Person (Right, matching sketch) -->
+            <section class="person-block align-right">
+                <div class="circle-avatar">
+                    <img
+                        src="{{ url_for('static', filename='images/kashish.jpeg') }}"
+                        alt="Kashish"
+                        onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22124%22 height=%22124%22><rect width=%22124%22 height=%22124%22 fill=%22%23eaf5ed%22/><text x=%2250%25%22 y=%2254%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2236%22 font-weight=%22bold%22 fill=%22%23155d35%22>K</text></svg>';"
+                    >
+                </div>
+                <h2 class="person-name">Kashish</h2>
+                <div class="person-role">Frontend Manager &bull; B.Tech</div>
+
+                <div class="block-label">Intro &amp; Project Contribution</div>
+                <p class="intro-copy">
+                    Handled the frontend presentation and user interface flow—checking page layout balance, responsive screen behavior, navigation clarity, and guiding the live UI walkthrough.
+                </p>
+
+                <div class="block-label">Skills</div>
+                <div class="skills-row">
+                    <span class="skill-pill">Frontend Flow</span>
+                    <span class="skill-pill">Responsive UI Checks</span>
+                    <span class="skill-pill">Layout Polish</span>
+                    <span class="skill-pill">Demo Walkthrough</span>
+                </div>
+            </section>
+
+            <!-- 3rd Person (Left) -->
+            <section class="person-block align-left">
+                <div class="circle-avatar">
+                    <img
+                        src="{{ url_for('static', filename='images/gauri.jpeg') }}"
+                        alt="Gauri"
+                        onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22124%22 height=%22124%22><rect width=%22124%22 height=%22124%22 fill=%22%23eaf5ed%22/><text x=%2250%25%22 y=%2254%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2236%22 font-weight=%22bold%22 fill=%22%23155d35%22>G</text></svg>';"
+                    >
+                </div>
+                <h2 class="person-name">Gauri</h2>
+                <div class="person-role">Resource Manager &bull; B.Tech</div>
+
+                <div class="block-label">Intro &amp; Project Contribution</div>
+                <p class="intro-copy">
+                    Managed scheme and MSP reference resources—verifying official government scheme portal links, cross-checking crop/MSP reference notes, and keeping presentation materials organized.
+                </p>
+
+                <div class="block-label">Skills</div>
+                <div class="skills-row">
+                    <span class="skill-pill">Scheme Research</span>
+                    <span class="skill-pill">MSP Reference Check</span>
+                    <span class="skill-pill">Portal Verification</span>
+                    <span class="skill-pill">Resource Curation</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <a href="{{ url_for('home') }}" class="logo" style="font-size: 22px;">
+                <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="32" height="32" rx="9" fill="#eaf5ed"/>
+                    <path d="M16 24V14" stroke="#155d35" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M16 17C11.5 17 8.5 14 8.5 9.5C13 9.5 16 12.5 16 17Z" fill="#237a46"/>
+                    <path d="M16 14.5C19.8 14.5 23.5 12 23.5 8C19.5 8 16 10.8 16 14.5Z" fill="#237a46"/>
+                </svg>
+                <span>Farm<span>Up.</span></span>
+            </a>
+            <div class="footer-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('priceEstimator') }}">Price Estimator</a>
+                <a href="{{ url_for('other_services') }}">Other Services</a>
+                <a href="{{ url_for('about') }}">About Us</a>
+            </div>
+        </div>
+        <div class="footer-note">
+            <strong>Note:</strong> Mandi rates, weather, distances, and MSP figures are informational aids—always verify live auction quotes, state procurement notifications, and scheme eligibility on official government portals before selling or applying.
+        </div>
+    </footer>
+</body>
+</html>
