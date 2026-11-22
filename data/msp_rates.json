@@ -1,0 +1,186 @@
+[
+  {
+    "crop": "Paddy (Common)",
+    "aliases": ["paddy", "dhaan", "rice common", "jhona"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 2441,
+    "region_required": true,
+    "region_note": "Uniform national MSP; state procurement windows, variety (Common vs Grade A), and portal registration vary by state."
+  },
+  {
+    "crop": "Paddy (Grade A)",
+    "aliases": ["paddy grade a", "grade a paddy", "basmati grade a"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 2461,
+    "region_required": true,
+    "region_note": "Uniform national MSP; verify state procurement agency rules and variety classification before delivery."
+  },
+  {
+    "crop": "Jowar (Hybrid)",
+    "aliases": ["jowar", "sorghum", "jowar hybrid"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 4023,
+    "region_required": true,
+    "region_note": "Specify Hybrid vs Maldandi and state procurement status."
+  },
+  {
+    "crop": "Jowar (Maldandi)",
+    "aliases": ["maldandi", "jowar maldandi"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 4073,
+    "region_required": true,
+    "region_note": "Specify Maldandi vs Hybrid and state procurement availability."
+  },
+  {
+    "crop": "Bajra",
+    "aliases": ["bajra", "pearl millet"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 2900,
+    "region_required": false,
+    "region_note": "National Kharif MSP; active procurement depends on state requisition."
+  },
+  {
+    "crop": "Ragi",
+    "aliases": ["ragi", "finger millet", "nachni"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 5205,
+    "region_required": false,
+    "region_note": "National Kharif MSP; check state or FPO procurement centers."
+  },
+  {
+    "crop": "Maize",
+    "aliases": ["maize", "makka"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 2410,
+    "region_required": false,
+    "region_note": "National Kharif MSP rate."
+  },
+  {
+    "crop": "Tur / Arhar",
+    "aliases": ["tur", "arhar", "pigeon pea"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8450,
+    "region_required": true,
+    "region_note": "Procurement under PM-AASHA / Pulses Mission depends on state approval and farmer registration."
+  },
+  {
+    "crop": "Moong",
+    "aliases": ["moong", "green gram"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8780,
+    "region_required": true,
+    "region_note": "PSS procurement under PM-AASHA requires state request and registered farmer quota."
+  },
+  {
+    "crop": "Urad",
+    "aliases": ["urad", "black gram"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8200,
+    "region_required": true,
+    "region_note": "Procurement under PM-AASHA / Pulses Mission depends on state approval and registration."
+  },
+  {
+    "crop": "Groundnut",
+    "aliases": ["groundnut", "mungfali", "peanut"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 7517,
+    "region_required": true,
+    "region_note": "Oilseed procurement under PM-AASHA varies by state."
+  },
+  {
+    "crop": "Sunflower Seed",
+    "aliases": ["sunflower", "surajmukhi"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8343,
+    "region_required": true,
+    "region_note": "Oilseed procurement under PM-AASHA varies by state."
+  },
+  {
+    "crop": "Soybean (Yellow)",
+    "aliases": ["soybean", "soya"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 5708,
+    "region_required": true,
+    "region_note": "Oilseed procurement under PM-AASHA varies by state."
+  },
+  {
+    "crop": "Sesamum",
+    "aliases": ["sesamum", "sesame", "til"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 10346,
+    "region_required": true,
+    "region_note": "Oilseed procurement under PM-AASHA varies by state."
+  },
+  {
+    "crop": "Nigerseed",
+    "aliases": ["nigerseed", "niger", "ramtil"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 10052,
+    "region_required": true,
+    "region_note": "Oilseed procurement under PM-AASHA varies by state."
+  },
+  {
+    "crop": "Cotton (Medium Staple)",
+    "aliases": ["cotton", "kapas", "medium staple cotton"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8267,
+    "region_required": true,
+    "region_note": "Specify staple category; procured through CCI in cotton-growing states."
+  },
+  {
+    "crop": "Cotton (Long Staple)",
+    "aliases": ["long staple cotton", "kapas long staple"],
+    "season": "Kharif 2026-27",
+    "msp_per_quintal": 8667,
+    "region_required": true,
+    "region_note": "Specify staple category; procured through CCI in cotton-growing states."
+  },
+  {
+    "crop": "Wheat",
+    "aliases": ["wheat", "gehu", "gehun"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 2610,
+    "region_required": false,
+    "region_note": "Rabi 2027-28 MSP (up from ₹2,585/qtl in Rabi 2026-27); state procurement calendars apply."
+  },
+  {
+    "crop": "Barley",
+    "aliases": ["barley", "jau"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 2286,
+    "region_required": false,
+    "region_note": "Rabi 2027-28 MSP rate."
+  },
+  {
+    "crop": "Gram",
+    "aliases": ["gram", "chana", "bengal gram"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 5958,
+    "region_required": true,
+    "region_note": "Rabi 2027-28 MSP; state procurement under PM-AASHA depends on state requisition."
+  },
+  {
+    "crop": "Lentil (Masur)",
+    "aliases": ["masur", "lentil", "masoor"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 7390,
+    "region_required": true,
+    "region_note": "Rabi 2027-28 MSP; pulses procurement provisions apply."
+  },
+  {
+    "crop": "Rapeseed & Mustard",
+    "aliases": ["mustard", "sarson", "rapeseed", "toria"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 6613,
+    "region_required": true,
+    "region_note": "Rabi 2027-28 MSP; PSS procurement depends on state requisition."
+  },
+  {
+    "crop": "Safflower",
+    "aliases": ["safflower", "kusum"],
+    "season": "Rabi 2027-28",
+    "msp_per_quintal": 7215,
+    "region_required": true,
+    "region_note": "Rabi 2027-28 MSP; oilseed procurement varies by state."
+  }
+]
